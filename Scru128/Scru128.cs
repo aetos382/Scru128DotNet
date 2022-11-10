@@ -1,81 +1,118 @@
 ﻿using System;
+using System.Buffers.Binary;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Scru128;
 
-[Serializable]
-public readonly partial struct Scru128 :
-    IEquatable<Scru128>,
-    IComparable<Scru128>,
-    IComparable,
-    IFormattable
+public readonly partial struct Scru128
 {
     public Scru128(
         byte[] bytes)
+        : this(
+              bytes.AsSpan())
     {
-        throw new NotImplementedException();
     }
 
-    public bool Equals(
-        Scru128 other)
+    public Scru128(
+        ReadOnlySpan<byte> bytes)
     {
-        return this.CompareTo(other) == 0;
+        Argument.ValidateByteSpan(bytes);
+
+        bytes.CopyTo(this.AsSpan());
     }
 
-    public override bool Equals(
-        object? obj)
+    public Scru128(
+        long timestamp,
+        int counterHigh,
+        int counterLow,
+        int entropy)
     {
-        return obj is Scru128 other && this.CompareTo(other) == 0;
-    }
+        Argument.ValidateTimestamp(timestamp);
+        Argument.ValidateCounter(counterHigh);
+        Argument.ValidateCounter(counterLow);
 
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
+        var span = this.AsSpan();
 
-    public int CompareTo(
-        Scru128 other)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override string ToString()
-    {
-        throw new NotImplementedException();
-    }
-
-    public string ToString(
-        string? format,
-        IFormatProvider? formatProvider)
-    {
-        throw new NotImplementedException();
-    }
-
-    public int CompareTo(
-        object? obj)
-    {
-        if (obj is not Scru128 other)
+        unchecked
         {
-            throw new ArgumentException();
+            ulong high =
+                (ulong)timestamp << 16 |
+                ((ulong)counterHigh & 0x00ff_ff00) >> 8;
+
+            ulong low =
+                ((ulong)counterHigh & 0x0000_00ff) << 48 |
+                (ulong)counterLow << 32 |
+                (uint)entropy;
+
+            BinaryPrimitives.WriteUInt64BigEndian(span, high);
+            BinaryPrimitives.WriteUInt64BigEndian(span.Slice(8), low);
+        }
+    }
+
+    public byte[] ToByteArray()
+    {
+        return this.AsReadOnlySpan().ToArray();
+    }
+
+    public bool TryWriteBytes(
+        Span<byte> destination)
+    {
+        return this.AsReadOnlySpan().TryCopyTo(destination);
+    }
+
+    private static readonly Scru128Generator _defaultGenerator = new Scru128Generator();
+
+    public static Scru128 Generate()
+    {
+        return _defaultGenerator.Generate();
+    }
+
+    public static string GenerateString()
+    {
+        return Generate().ToString();
+    }
+
+    private unsafe struct Value
+    {
+        public fixed byte Values[16];
+    }
+
+    private readonly Value _value;
+
+    private unsafe Span<byte> AsSpan()
+    {
+        fixed (byte* p = this._value.Values)
+        {
+            return new Span<byte>(p, BytesCount);
+        }
+    }
+
+    private unsafe ReadOnlySpan<byte> AsReadOnlySpan()
+    {
+        fixed (byte* p = this._value.Values)
+        {
+            return new ReadOnlySpan<byte>(p, BytesCount);
+        }
+    }
+
+    private long SubLong(
+        int beginIndex,
+        int endIndex)
+    {
+        long result = 0;
+        var span = this.AsReadOnlySpan();
+
+        for (var i = beginIndex; i < endIndex; ++i)
+        {
+            result = (result << 8) | span[i];
         }
 
-        return this.CompareTo(other);
+        return result;
     }
 
-    public byte[] ToByteArrray()
-    {
-        throw new NotImplementedException();
-    }
-
-    public static Scru128 Parse(
-        string input)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool TryParse(
-        string input,
-        out Scru128 result)
-    {
-        throw new NotImplementedException();
-    }
+    internal const int BytesCount = 16;
+    internal const int CharCount = 25;
+    internal const long MaxTimestamp = 0x0000_ffff_ffff_ffff;
+    internal const int MaxCounter = 0x00ff_ffff;
 }

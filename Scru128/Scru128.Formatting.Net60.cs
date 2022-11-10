@@ -1,8 +1,8 @@
-﻿using System;
+﻿#if NET6_0_OR_GREATER
+
+using System;
 
 namespace Scru128;
-
-#if NET6_0_OR_GREATER
 
 public readonly partial struct Scru128 :
     ISpanFormattable
@@ -13,7 +13,9 @@ public readonly partial struct Scru128 :
         ReadOnlySpan<char> format,
         IFormatProvider? provider)
     {
-        throw new NotImplementedException();
+        var result = this.TryFormat(destination);
+        charsWritten = result ? CharCount : 0;
+        return result;
     }
 }
 
