@@ -1,0 +1,20 @@
+name: Test Report
+on:
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
+
+jobs:
+  report:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: phoenix-actions/test-reporting@v8
+        id: test-report
+        if: success() || failure()
+        with:
+          name: xUnit.NET Tests
+          artifact: Test Result
+          path: '**/TestResults/*.trx'
+          reporter: dotnet-trx
