@@ -55,4 +55,3 @@ jobs:
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: '**/TestResults/*/coverage.cobertura.xml'
-
