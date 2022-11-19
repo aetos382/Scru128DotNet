@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Scru128DotNet.DotnetTool": {
+      "commandName": "Project",
+      "commandLineArgs": "--count 5"
+    }
+  }
+}
