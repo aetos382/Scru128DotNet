@@ -44,17 +44,11 @@ jobs:
           name: Test Results
           path: '**/TestResults/*.trx'
 
-      - name: Collect NuGet Packages
-        shell: pwsh
-        run: |
-          New-Item -Path nupkgs -ItemType Directory
-          Get-ChildItem -Filter *.nupkg -Recurse | Copy-Item -Destination nupkgs
-
       - name: Save NuGet Packages
         uses: actions/upload-artifact@v3
         with:
           name: NuGet Packages
-          path: 'nupkgs/*.nupkg'
+          path: '**/*.nupkg'
 
       - name: Codacy Coverage Reporter
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
