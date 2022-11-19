@@ -10,7 +10,7 @@ jobs:
           - ubuntu-22.04
           - windows-2022
 
-    runs-on: ${{ matxix.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
 
     steps:
       - uses: actions/checkout@v3
