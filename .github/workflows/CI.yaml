@@ -41,5 +41,12 @@ jobs:
       - name: Save Test Results
         uses: actions/upload-artifact@v3
         with:
-          name: Test Result
+          name: Test Results
           path: '**/TestResults/*.trx'
+
+      - name: Save NuGet Packages
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: NuGet Packages
+          path: '**/*.nupkg'

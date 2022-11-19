@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: phoenix-actions/test-reporting@v8
         id: test-report
-        if: success() || failure()
+        if: success()
         with:
           name: xUnit.NET Tests
           artifact: Test Result
