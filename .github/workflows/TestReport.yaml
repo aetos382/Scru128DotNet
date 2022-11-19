@@ -15,6 +15,6 @@ jobs:
         if: success()
         with:
           name: xUnit.NET Tests
-          artifact: Test Result
+          artifact: Test Results
           path: '**/TestResults/*.trx'
           reporter: dotnet-trx
