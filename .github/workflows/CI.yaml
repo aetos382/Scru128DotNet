@@ -44,9 +44,14 @@ jobs:
           name: Test Results
           path: '**/TestResults/*.trx'
 
+      - name: Collect NuGet Packages
+        shell: pwsh
+        run: |
+          New-Item -Path nupkgs -ItemType Directory
+          Get-ChildItem -Filter *.nupkg -Recurse | Copy-Item -Destination nupkgs
+
       - name: Save NuGet Packages
-        if: success()
         uses: actions/upload-artifact@v3
         with:
           name: NuGet Packages
-          path: '**/*.nupkg'
+          path: 'nupkgs/*.nupkg'
