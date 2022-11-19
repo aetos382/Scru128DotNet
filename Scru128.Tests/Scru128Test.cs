@@ -1,78 +1,40 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Scru128.Tests;
 
-public partial class Scru128Test
+public class Scru128Test
 {
-    /*
-#if NET7_0_OR_GREATER
-
-    [GeneratedRegex("^[0-9A-Z]{25}", RegexOptions.Singleline | RegexOptions.CultureInvariant)]
-    private static partial Regex Scru128Pattern();
-
-#else
-
-    private static readonly Regex _pattern = new Regex("^[0-9A-Z]{25}", RegexOptions.Singleline | RegexOptions.CultureInvariant);
-
-    private static Regex Scru128Pattern()
+    [Fact]
+    public void 構造体のサイズは16バイト()
     {
-        return _pattern;
-    }
+        var actual = Unsafe.SizeOf<Scru128>();
 
-#endif
-
-    private const int Count = 100;
-
-    private readonly IReadOnlyList<string> _samples;
-
-    public Scru128Test()
-    {
-        var array = new string[Count];
-
-        for (int i = 0; i < Count; ++i)
-        {
-            array[i] = Scru128.GenerateString();
-        }
-
-        this._samples = array;
+        Assert.Equal(16, actual);
     }
 
     [Fact]
-    public void TestFormat()
+    public void Test1()
     {
-        Assert.All(
-            this._samples,
-            static sample => Assert.Matches(Scru128Pattern(), sample));
-    }
+        var data = new Scru128(
+            0x1234_5678_9abc,
+            0xde_f013,
+            0x57_9bdf,
+            0x2468_ace0);
 
-    [Fact]
-    public void Compare()
-    {
-        for (int i = 0; i < Count - 1; ++i)
+        Span<byte> buffer = stackalloc byte[16];
+
+        var ok = data.TryWriteBytes(buffer);
+        Assert.True(ok);
+
+        ReadOnlySpan<byte> expected = new byte[]
         {
-            var id1 = this._samples[i];
-            var id2 = this._samples[i + 1];
+            0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc,
+            0xde, 0xf0, 0x13,
+            0x57, 0x9b, 0xdf,
+            0x24, 0x68, 0xac, 0xe0
+        }.AsSpan();
 
-            Assert.True(id1.CompareTo(id2) < 0);
-        }
-    }
-    */
-
-    [Theory]
-    [InlineData(0, 0, 0, 0, "0000000000000000000000000")]
-    [InlineData(MAX_INT48, 0, 0, 0, "F5LXX1ZZ5K6TP71GEEH2DB7K0")]
-    // [InlineData(0x0000_1234_5678_9abc, 0x00de_f012, 0, 0, "F5LXX1ZZ5K6TP71GEEH2DB7K0")]
-    public void Test(
-        long timestamp,
-        int counterHigh,
-        int counterLow,
-        int entropy,
-        string expected)
-    {
-        var scru128 = new Scru128(timestamp, counterHigh, counterLow, entropy);
-        var actual = scru128.ToString();
-
-        Assert.Equal(expected, actual);
+        Assert.True(buffer.SequenceEqual(expected));
     }
 }

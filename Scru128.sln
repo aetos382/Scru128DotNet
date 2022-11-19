@@ -5,7 +5,13 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scru128", "Scru128\Scru128.csproj", "{C567F118-0450-47F3-9D4F-EEF571D39BCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scru128.Tests", "Scru128.Tests\Scru128.Tests.csproj", "{CEEFE2BC-78B1-4745-9689-EF574C1E23DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scru128.Tests", "Scru128.Tests\Scru128.Tests.csproj", "{CEEFE2BC-78B1-4745-9689-EF574C1E23DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scru128.Benchmark", "Scru128.Benchmark\Scru128.Benchmark.csproj", "{8E2855E1-5966-4702-9A71-62CA88C80A7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scru128.GeneratorTest", "Scru128.GeneratorTest\Scru128.GeneratorTest.csproj", "{78B6795F-35E2-4500-920A-60EC0E52922F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scru128.DotnetTool", "Scru128.DotnetTool\Scru128.DotnetTool.csproj", "{78E27628-58AE-4483-AE11-DA11502E11FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{CEEFE2BC-78B1-4745-9689-EF574C1E23DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEEFE2BC-78B1-4745-9689-EF574C1E23DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEEFE2BC-78B1-4745-9689-EF574C1E23DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2855E1-5966-4702-9A71-62CA88C80A7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2855E1-5966-4702-9A71-62CA88C80A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2855E1-5966-4702-9A71-62CA88C80A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2855E1-5966-4702-9A71-62CA88C80A7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78B6795F-35E2-4500-920A-60EC0E52922F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78B6795F-35E2-4500-920A-60EC0E52922F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78B6795F-35E2-4500-920A-60EC0E52922F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78B6795F-35E2-4500-920A-60EC0E52922F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E27628-58AE-4483-AE11-DA11502E11FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E27628-58AE-4483-AE11-DA11502E11FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E27628-58AE-4483-AE11-DA11502E11FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E27628-58AE-4483-AE11-DA11502E11FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

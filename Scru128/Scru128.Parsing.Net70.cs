@@ -14,7 +14,7 @@ public readonly partial struct Scru128 :
     {
         Argument.NotNull(input);
 
-        return Parse(input.AsSpan(), provider);
+        return Parse(input.AsSpan());
     }
 
     public static Scru128 Parse(

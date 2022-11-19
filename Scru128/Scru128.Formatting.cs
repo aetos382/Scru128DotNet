@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Scru128;
 
@@ -49,9 +49,9 @@ public readonly partial struct Scru128 :
 
             for (; carry > 0 || j > minIndex; --j)
             {
-                carry += work[j] << 56;
-                work[j] = (byte)(carry % 36);
-                carry = carry / 36;
+                carry += (long)work[j] << 56;
+                work[j] = (byte)(carry % Radix);
+                carry /= Radix;
             }
 
             minIndex = j;
@@ -63,5 +63,20 @@ public readonly partial struct Scru128 :
         }
 
         return true;
+    }
+
+    private long SubLong(
+        int beginIndex,
+        int endIndex)
+    {
+        long result = 0;
+        var span = this.AsReadOnlySpan();
+
+        for (var i = beginIndex; i < endIndex; ++i)
+        {
+            result = (result << 8) | span[i];
+        }
+
+        return result;
     }
 }

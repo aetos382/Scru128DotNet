@@ -1,0 +1,35 @@
+name: dotnet package
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        runs-on:
+          - ubuntu-22.04
+          - windows-2022
+
+    runs-on: ${{ matxix.runs-on }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2
+
+      - name: Install dependencies
+        run: dotnet restore --locked-mode
+
+      - name: build
+        run: dotnet build --configuration Release --no-restore --no-incremental
+
+      - name: Test
+        run: dotnet test --configuration Release --no-restore --no-build

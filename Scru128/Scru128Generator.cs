@@ -108,6 +108,7 @@ public sealed class Scru128Generator :
         this._randomNumberGenerator.GetBytes(buffer);
         result = BitConverter.ToInt32(buffer);
 #endif
+
         return result;
     }
 
