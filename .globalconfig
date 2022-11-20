@@ -3,6 +3,7 @@ is_global = true
 dotnet_analyzer_diagnostic.severity = error
 
 dotnet_diagnostic.IDE0003.severity = none
+dotnet_diagnostic.IDE0005.severity = warning
 dotnet_diagnostic.IDE0007.severity = suggestion
 dotnet_diagnostic.IDE0008.severity = none
 dotnet_diagnostic.IDE0009.severity = suggestion
@@ -10,6 +11,7 @@ dotnet_diagnostic.IDE0008.severity = none
 dotnet_diagnostic.IDE0046.severity = none
 dotnet_diagnostic.IDE0055.severity = suggestion
 dotnet_diagnostic.IDE0057.severity = none
+dotnet_diagnostic.IDE0059.severity = warning
 dotnet_diagnostic.IDE0078.severity = suggestion
 dotnet_diagnostic.IDE0130.severity = warning
 dotnet_diagnostic.IDE0160.severity = none
