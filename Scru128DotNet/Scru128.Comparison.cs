@@ -48,16 +48,11 @@ public readonly partial struct Scru128 :
     public int CompareTo(
         object? obj)
     {
-        if (obj is null)
+        return obj switch
         {
-            return int.MaxValue;
-        }
-
-        if (obj is not Scru128 other)
-        {
-            throw new ArgumentException(Resources.ArgumentMustBeScru128, nameof(obj));
-        }
-
-        return this.CompareTo(other);
+            null => int.MaxValue,
+            Scru128 other => this.CompareTo(other),
+            _ => throw new ArgumentException(Resources.ArgumentMustBeScru128, nameof(obj))
+        };
     }
 }
