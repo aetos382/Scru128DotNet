@@ -1,4 +1,6 @@
-﻿using System;
+﻿// ReSharper disable ArrangeThisQualifier
+
+using System;
 using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -19,14 +21,7 @@ public readonly partial struct Scru128
     {
         Argument.ValidateByteSpan(bytes);
 
-        unsafe
-        {
-            var span = new Span<byte>(
-                Unsafe.AsPointer(ref this._value._value),
-                BytesCount);
-
-            bytes.CopyTo(span);
-        }
+        bytes.CopyTo(this.AsSpan());
     }
 
     public Scru128(
@@ -50,15 +45,10 @@ public readonly partial struct Scru128
                 ((ulong)counterLow << 32) |
                 (uint)entropy;
 
-            unsafe
-            {
-                var span = new Span<byte>(
-                    Unsafe.AsPointer(ref this._value._value),
-                    BytesCount);
+            var span = this.AsSpan();
 
-                BinaryPrimitives.WriteUInt64BigEndian(span, high);
-                BinaryPrimitives.WriteUInt64BigEndian(span.Slice(8), low);
-            }
+            BinaryPrimitives.WriteUInt64BigEndian(span, high);
+            BinaryPrimitives.WriteUInt64BigEndian(span.Slice(8), low);
         }
     }
 
@@ -143,14 +133,18 @@ public readonly partial struct Scru128
 
     private readonly Value _value;
 
-    private ReadOnlySpan<byte> AsReadOnlySpan()
+    private unsafe Span<byte> AsSpan()
     {
-        unsafe
-        {
-            return new ReadOnlySpan<byte>(
-                Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._value)),
-                BytesCount);
-        }
+        return new Span<byte>(
+            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._value)),
+            BytesCount);
+    }
+
+    private unsafe ReadOnlySpan<byte> AsReadOnlySpan()
+    {
+        return new ReadOnlySpan<byte>(
+            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._value)),
+            BytesCount);
     }
 
     internal const int BytesCount = 16;
