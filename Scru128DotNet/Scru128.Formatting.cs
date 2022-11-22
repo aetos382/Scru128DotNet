@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Scru128DotNet;
 
@@ -9,7 +9,7 @@ public readonly partial struct Scru128 :
     {
 #if NETSTANDARD2_0
         Span<char> buffer = stackalloc char[CharCount];
-        TryFormat(buffer);
+        this.TryFormat(buffer);
 
         return buffer.ToString();
 #else

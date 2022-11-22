@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 #if NETSTANDARD2_0
 using System.Buffers;
@@ -27,7 +27,7 @@ public sealed class Scru128Generator :
 
     public Scru128 Generate()
     {
-        return Generate(
+        return this.Generate(
             DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
     }
 
@@ -58,7 +58,7 @@ public sealed class Scru128Generator :
                 {
                     hi = 0;
                     ++ts;
-                    lo = NextInt() & Scru128.MaxCounter;
+                    lo = this.NextInt() & Scru128.MaxCounter;
                 }
             }
         }
@@ -66,7 +66,7 @@ public sealed class Scru128Generator :
         {
             this._tsCounterHi = 0;
             ts = timestamp;
-            lo = NextInt() & Scru128.MaxCounter;
+            lo = this.NextInt() & Scru128.MaxCounter;
         }
 
         if (ts - _tsCounterHi >= 1000 || _tsCounterHi < 1)
@@ -81,7 +81,7 @@ public sealed class Scru128Generator :
             ts,
             hi,
             lo,
-            NextInt());
+            this.NextInt());
 
         return result;
     }
