@@ -48,41 +48,61 @@ public readonly partial struct Scru128
         }
 
         Span<byte> source = stackalloc byte[CharCount];
-        for (var i = 0; i < CharCount; ++i)
+        for (int i = 0; i < CharCount; ++i)
         {
-            var c = input[i];
-            var s = DecodeMap[c];
+            char c = input[i];
 
-            if (c > 'z' || s == 0x7f)
+            int x = c switch
             {
-                throw new ArgumentException();
-            }
+                >= 'A' and <= 'Z' => c - 55,
+                >= '0' and <= '9' => c - '0',
+                >= 'a' and <= 'z' => c - 87,
+                _ => throw new FormatException()
+            };
 
-            source[i] = s;
+            source[i] = unchecked((byte)x);
         }
 
-        Span<byte> data = stackalloc byte[BytesCount];
-        var minIndex = int.MaxValue;
-
-        for (var i = -5; i < CharCount; i += 10)
+        Span<(int Index, int Length)> indices = stackalloc[]
         {
-            long carry = 0;
+            (0, 5),
+            (5, 10),
+            (15, 10)
+        };
 
-            for (var j = i < 0 ? 0 : i; j < i + 10; ++j)
+        Span<byte> data = stackalloc byte[BytesCount];
+
+        for (int i = 0, minIndex = BytesCount + 1; i < 3; ++i)
+        {
+            var (index, length) = indices[i];
+
+            var span = source.Slice(index, length);
+
+            ulong carry = 0;
+
+            for (int j = 0; j < length; ++j)
             {
-                carry = (carry * 36) + source[j];
+                carry = (carry * Radix) + span[j];
             }
 
-            var k = BytesCount - 1;
+            int k = BytesCount - 1;
+
             for (; carry > 0 || k > minIndex; --k)
             {
                 if (k < 0)
                 {
-                    throw new ArgumentException();
+                    throw new FormatException();
                 }
 
-                carry += data[k] * 3656158440062976L; // 36^10
-                data[k] = (byte)carry;
+                ref byte rd = ref data[k];
+                byte d = rd;
+
+                if (d != 0)
+                {
+                    carry += d * 3656158440062976UL; // 36^10
+                }
+
+                rd = unchecked((byte)carry);
                 carry >>= 8;
             }
 
@@ -92,16 +112,4 @@ public readonly partial struct Scru128
         result = new Scru128(data);
         return true;
     }
-
-    private static readonly byte[] DecodeMap = new byte[]
-    {
-        0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f,
-        0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f,
-        0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x00, 0x01, 0x02,
-        0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x0a, 0x0b, 0x0c,
-        0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d,
-        0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e,
-        0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
-        0x20, 0x21, 0x22, 0x23, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f,
-    };
 }
