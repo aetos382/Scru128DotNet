@@ -15,4 +15,20 @@
       TestResults/**/*
     </DefaultItemExcludesInProjectFolder>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsPackable)' == 'True'">
+    <None Include="$(MSBuildThisFileDirectory)\README.md">
+      <Visible>True</Visible>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup Label="Packaging">
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageTags>scru128</PackageTags>
+    <PackageProjectUrl>https://github.com/aetos382/Scru128DotNet</PackageProjectUrl>
+  </PropertyGroup>
+
 </Project>

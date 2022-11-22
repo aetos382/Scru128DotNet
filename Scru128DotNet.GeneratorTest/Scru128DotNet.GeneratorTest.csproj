@@ -12,6 +12,7 @@
     <PublishTrimmed>True</PublishTrimmed>
     <PublishReadyToRun>True</PublishReadyToRun>
     <NoWarn>$(NoWarn);CA1852</NoWarn>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

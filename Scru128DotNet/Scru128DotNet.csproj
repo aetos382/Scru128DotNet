@@ -7,9 +7,6 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageTags>scru128</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <WarningLevel>9999</WarningLevel>
@@ -37,16 +34,9 @@
     <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard2.'))">
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>
