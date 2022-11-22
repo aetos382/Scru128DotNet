@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 #if NETSTANDARD2_0
 using System.Buffers;
@@ -11,20 +11,6 @@ namespace Scru128DotNet;
 public sealed class Scru128Generator :
     IDisposable
 {
-    public Scru128Generator()
-        : this(
-              RandomNumberGenerator.Create())
-    {
-    }
-
-    public Scru128Generator(
-        RandomNumberGenerator randomNumberGenerator)
-    {
-        Argument.NotNull(randomNumberGenerator);
-
-        this._randomNumberGenerator = randomNumberGenerator;
-    }
-
     public Scru128 Generate()
     {
         return this.Generate(
@@ -36,21 +22,27 @@ public sealed class Scru128Generator :
     {
         Argument.ValidateTimestamp(timestamp);
 
-        var ts = this._timestamp;
-        var hi = this._counterHigh;
-        var lo = this._counterLow;
+        this.CheckDisposed();
+
+        long ts = this._timestamp;
+        int hi = this._counterHigh;
+        int lo = this._counterLow;
+        long tsHi = this._timestampWhenCounterHighUpdated;
 
         if (timestamp > ts)
         {
+            // counter_lo is reset to a random number whenever timestamp moves forward.
             ts = timestamp;
-            lo = NextInt() & Scru128.MaxCounter;
+            lo = this.NextInt() & Scru128.MaxCounter;
         }
         else if (timestamp + 10000 > ts)
         {
+            // same timestamp or the rollback is small enough (e.g. a few seconds)
             ++lo;
 
             if (lo > Scru128.MaxCounter)
             {
+                // when counter_lo reaches its maximum value, counter_hi is incremented and counter_lo is reset to zero.
                 lo = 0;
                 ++hi;
 
@@ -64,18 +56,23 @@ public sealed class Scru128Generator :
         }
         else
         {
-            this._tsCounterHi = 0;
+            // reset state if clock moves back by ten seconds or more
+            tsHi = 0;
             ts = timestamp;
             lo = this.NextInt() & Scru128.MaxCounter;
         }
 
-        if (ts - _tsCounterHi >= 1000 || _tsCounterHi < 1)
+        if (ts - tsHi >= 1000)
         {
-            _tsCounterHi = ts;
-            hi = NextInt() & Scru128.MaxCounter;
+            // counter_hi is reset to a random number when timestamp has moved forward by one second or more since the last renewal of counter_hi.
+            tsHi = ts;
+            hi = this.NextInt() & Scru128.MaxCounter;
         }
 
-        (this._timestamp, this._counterHigh, this._counterLow) = (ts, hi, lo);
+        this._timestamp = ts;
+        this._counterHigh = hi;
+        this._counterLow = lo;
+        this._timestampWhenCounterHighUpdated = tsHi;
 
         var result = new Scru128(
             ts,
@@ -88,34 +85,48 @@ public sealed class Scru128Generator :
 
     public void Dispose()
     {
+        if (this._disposed)
+        {
+            return;
+        }
+
+        this._disposed = true;
         this._randomNumberGenerator.Dispose();
     }
 
     private int NextInt()
     {
-        int result;
-
 #if NETSTANDARD2_0
         var pool = ArrayPool<byte>.Shared;
         var buffer = pool.Rent(4);
 
         this._randomNumberGenerator.GetBytes(buffer);
-        result = BitConverter.ToInt32(buffer, 0);
+        int result = BitConverter.ToInt32(buffer, 0);
 
         pool.Return(buffer);
+
+        return result;
 #else
         Span<byte> buffer = stackalloc byte[4];
         this._randomNumberGenerator.GetBytes(buffer);
-        result = BitConverter.ToInt32(buffer);
+        return BitConverter.ToInt32(buffer);
 #endif
-
-        return result;
     }
 
-    private readonly RandomNumberGenerator _randomNumberGenerator;
+    private readonly RandomNumberGenerator _randomNumberGenerator = RandomNumberGenerator.Create();
 
     private long _timestamp;
     private int _counterHigh;
     private int _counterLow;
-    private long _tsCounterHi;
+    private long _timestampWhenCounterHighUpdated;
+
+    private bool _disposed;
+
+    private void CheckDisposed()
+    {
+        if (this._disposed)
+        {
+            throw new ObjectDisposedException(this.GetType().Name);
+        }
+    }
 }
