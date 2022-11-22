@@ -37,4 +37,25 @@ public class Scru128Test
 
         Assert.True(buffer.SequenceEqual(expected));
     }
+
+    [Fact]
+    public void Test2()
+    {
+        var data = new Scru128(
+            0x0000_1234_5678_9abc,
+            0x00de_f013,
+            0x0057_9bdf,
+            0x2468_ace0);
+
+        string s = data.ToString();
+
+        bool ok = Scru128.TryParse(s, out var data2);
+
+        Assert.True(ok);
+
+        Assert.Equal(0x0000_1234_5678_9abc, data2.Timestamp);
+        Assert.Equal(0x00de_f013, data2.CounterHigh);
+        Assert.Equal(0x0057_9bdf, data2.CounterLow);
+        Assert.Equal(0x2468_ace0, data2.Entropy);
+    }
 }
