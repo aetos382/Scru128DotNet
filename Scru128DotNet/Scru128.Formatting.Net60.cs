@@ -13,7 +13,7 @@ public readonly partial struct Scru128 :
         ReadOnlySpan<char> format,
         IFormatProvider? provider)
     {
-        var result = this.TryFormat(destination);
+        bool result = this.TryFormat(destination);
         charsWritten = result ? CharCount : 0;
         return result;
     }

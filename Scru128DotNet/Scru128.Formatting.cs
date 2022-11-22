@@ -13,7 +13,7 @@ public readonly partial struct Scru128 :
 
         return buffer.ToString();
 #else
-        var result = string.Create(CharCount, this, static (buffer, self) =>
+        string result = string.Create(CharCount, this, static (buffer, self) =>
         {
             self.TryFormat(buffer);
         });
@@ -57,7 +57,7 @@ public readonly partial struct Scru128 :
             minIndex = j;
         }
 
-        for (var i = 0; i < CharCount; ++i)
+        for (int i = 0; i < CharCount; ++i)
         {
             destination[i] = digits[work[i]];
         }

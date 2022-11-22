@@ -19,7 +19,7 @@ public class FormattingTest
         string expected)
     {
         var scru128 = new Scru128(timestamp, counterHigh, counterLow, entropy);
-        var actual = scru128.ToString();
+        string actual = scru128.ToString();
 
         Assert.Equal(expected, actual);
     }

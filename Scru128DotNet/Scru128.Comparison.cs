@@ -33,8 +33,8 @@ public readonly partial struct Scru128 :
         hashCode.AddBytes(span);
         return hashCode.ToHashCode();
 #else
-        var code1 = HashCode.Combine(span[0], span[1], span[2], span[3], span[4], span[5], span[6], span[7]);
-        var code2 = HashCode.Combine(span[8], span[9], span[10], span[11], span[12], span[13], span[14], span[15]);
+        int code1 = HashCode.Combine(span[0], span[1], span[2], span[3], span[4], span[5], span[6], span[7]);
+        int code2 = HashCode.Combine(span[8], span[9], span[10], span[11], span[12], span[13], span[14], span[15]);
         return HashCode.Combine(code1, code2);
 #endif
     }

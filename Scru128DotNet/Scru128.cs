@@ -1,4 +1,4 @@
-﻿// ReSharper disable ArrangeThisQualifier
+// ReSharper disable ArrangeThisQualifier
 
 using System;
 using System.Buffers.Binary;
@@ -36,11 +36,11 @@ public readonly partial struct Scru128
 
         unchecked
         {
-            var high =
+            ulong high =
                 ((ulong)timestamp << 16) |
                 (((ulong)counterHigh & 0x00ff_ff00) >> 8);
 
-            var low =
+            ulong low =
                 (((ulong)counterHigh & 0x0000_00ff) << 56) |
                 ((ulong)counterLow << 32) |
                 (uint)entropy;
@@ -58,7 +58,7 @@ public readonly partial struct Scru128
         {
             var span = this.AsReadOnlySpan();
 
-            var value = BinaryPrimitives.ReadInt64BigEndian(span);
+            long value = BinaryPrimitives.ReadInt64BigEndian(span);
             value = (value >> 16) & MaxTimestamp;
 
             return value;
@@ -71,7 +71,7 @@ public readonly partial struct Scru128
         {
             var span = this.AsReadOnlySpan().Slice(6);
 
-            var value = BinaryPrimitives.ReadInt32BigEndian(span);
+            int value = BinaryPrimitives.ReadInt32BigEndian(span);
             value = (value >> 8) & MaxCounter;
 
             return value;
@@ -84,7 +84,7 @@ public readonly partial struct Scru128
         {
             var span = this.AsReadOnlySpan().Slice(9);
 
-            var value = BinaryPrimitives.ReadInt32BigEndian(span);
+            int value = BinaryPrimitives.ReadInt32BigEndian(span);
             value = (value >> 8) & MaxCounter;
 
             return value;
@@ -97,7 +97,7 @@ public readonly partial struct Scru128
         {
             var span = this.AsReadOnlySpan().Slice(12);
 
-            var value = BinaryPrimitives.ReadInt32BigEndian(span);
+            int value = BinaryPrimitives.ReadInt32BigEndian(span);
             return value;
         }
     }

@@ -8,7 +8,7 @@ public class Scru128Test
     [Fact]
     public void 構造体のサイズは16バイト()
     {
-        var actual = Unsafe.SizeOf<Scru128>();
+        int actual = Unsafe.SizeOf<Scru128>();
 
         Assert.Equal(16, actual);
     }
@@ -24,7 +24,7 @@ public class Scru128Test
 
         Span<byte> buffer = stackalloc byte[16];
 
-        var ok = data.TryWriteBytes(buffer);
+        bool ok = data.TryWriteBytes(buffer);
         Assert.True(ok);
 
         ReadOnlySpan<byte> expected = new byte[]
