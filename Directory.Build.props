@@ -11,7 +11,8 @@
   <PropertyGroup>
     <DefaultItemExcludesInProjectFolder>
       $(DefaultItemExcludesInProjectFolder);
-      packages.lock.json
+      packages.lock.json;
+      TestResults/**/*
     </DefaultItemExcludesInProjectFolder>
   </PropertyGroup>
 </Project>
