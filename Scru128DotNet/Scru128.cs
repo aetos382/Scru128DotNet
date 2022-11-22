@@ -128,7 +128,7 @@ public readonly partial struct Scru128
     [StructLayout(LayoutKind.Sequential, Size = 16)]
     private struct Value
     {
-        public byte _value;
+        public byte _firstByte;
     }
 
     private readonly Value _value;
@@ -136,14 +136,14 @@ public readonly partial struct Scru128
     private unsafe Span<byte> AsSpan()
     {
         return new Span<byte>(
-            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._value)),
+            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._firstByte)),
             BytesCount);
     }
 
     private unsafe ReadOnlySpan<byte> AsReadOnlySpan()
     {
         return new ReadOnlySpan<byte>(
-            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._value)),
+            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._firstByte)),
             BytesCount);
     }
 
