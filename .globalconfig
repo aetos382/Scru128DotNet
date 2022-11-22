@@ -21,10 +21,13 @@ dotnet_diagnostic.IDE0130.severity = warning
 dotnet_diagnostic.IDE0160.severity = none
 dotnet_diagnostic.IDE0161.severity = suggestion
 dotnet_diagnostic.IDE0200.severity = suggestion
+
 dotnet_diagnostic.CA1725.severity = warning
 dotnet_diagnostic.CA1822.severity = suggestion
 dotnet_diagnostic.CA1852.severity = suggestion
 dotnet_diagnostic.CA2208.severity = warning
+
+dotnet_diagnostic.xUnit1026.severity = warning
 
 dotnet_style_prefer_conditional_expression_over_return = false
 
