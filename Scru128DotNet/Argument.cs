@@ -8,7 +8,6 @@ namespace Scru128DotNet;
 
 internal static class Argument
 {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void NotNull<T>(
         [NotNull] T? value,
         [CallerArgumentExpression(nameof(value))] string parameterName = "")
@@ -19,7 +18,6 @@ internal static class Argument
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ValidateTimestamp(
         long timestamp,
         [CallerArgumentExpression(nameof(timestamp))] string parameterName = "")
@@ -30,7 +28,6 @@ internal static class Argument
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ValidateCounter(
         long counter,
         [CallerArgumentExpression(nameof(counter))] string parameterName = "")
