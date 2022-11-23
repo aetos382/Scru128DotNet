@@ -9,6 +9,10 @@
     "url": "https://github.com/aetos382/Scru128DotNet.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "shipjs prepare"
+  },
+  "devDependencies": {
+    "shipjs": "0.25.0"
   }
 }
