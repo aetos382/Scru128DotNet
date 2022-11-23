@@ -1,7 +1,7 @@
 {
   "name": "scru128dotnet",
   "description": "SCRU128 implemenatation for .NET",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "aetos",
   "license": "Apache-2.0",
   "repository": {
