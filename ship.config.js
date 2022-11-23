@@ -5,8 +5,12 @@ const { XMLParser, XMLBuilder, XMLValidator } = require('fast-xml-parser');
 module.exports = {
 
     versionUpdated: ({version, releaseType, dir, exec}) => {
+        console.log("versionUpdated called.");
+
         const directoryBuildPropsPath = path.resolve(dir, 'Directory.Build.props');
         const xmlSource = fs.readFileSync(directoryBuildPropsPath, 'utf-8').toString();
+
+        console.log("file read.");
 
         const parser = new XMLParser({
             ignoreAttributes: false,
@@ -23,5 +27,6 @@ module.exports = {
             format: true
         })
     },
+
     buildCommand: () => null
 };
