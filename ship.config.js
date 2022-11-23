@@ -1,5 +1,5 @@
 const path = require('path');
-const setVersion = require('./.ship/setVersion.js');
+const { setVersion } = require('./.ship/setVersion.js');
 
 module.exports = {
 
