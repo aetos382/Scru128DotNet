@@ -13,6 +13,8 @@
     "release": "shipjs prepare"
   },
   "devDependencies": {
-    "shipjs": "0.25.0"
+    "@xmldom/xmldom": "^0.8.6",
+    "shipjs": "0.25.0",
+    "xpath": "^0.0.32"
   }
 }
