@@ -13,6 +13,7 @@
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <AnalysisMode>All</AnalysisMode>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <Description>SRCU128 implementation for .NET</Description>
   </PropertyGroup>
 
   <ItemGroup>

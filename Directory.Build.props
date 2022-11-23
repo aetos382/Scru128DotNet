@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Packaging">
+    <Authors>aetos</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageTags>scru128</PackageTags>
