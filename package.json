@@ -1,0 +1,14 @@
+{
+  "name": "scru128dotnet",
+  "description": "SCRU128 implemenatation for .NET",
+  "version": "0.1.0",
+  "author": "aetos",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aetos382/Scru128DotNet.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
