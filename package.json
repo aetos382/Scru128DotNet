@@ -13,6 +13,7 @@
     "release": "shipjs prepare"
   },
   "devDependencies": {
+    "fast-xml-parser": "^4.0.12",
     "shipjs": "0.25.0"
   }
 }
