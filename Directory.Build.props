@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Packaging">
+    <Version>0.1.0</Version>
     <Authors>aetos</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
