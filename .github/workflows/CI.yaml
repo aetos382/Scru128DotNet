@@ -7,38 +7,19 @@ jobs:
     strategy:
       matrix:
         runs-on:
-          - ubuntu-22.04
-          - windows-2022
+          - ubuntu-latest
+          - windows-latest
 
     runs-on: ${{ matrix.runs-on }}
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node.JS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
-            6.0.403
-            7.0.100
-
-      - name: Get NPM cache directory
-        id: npm-cache-dir
-        shell: pwsh
-        run: echo "dir=$(npm config get cache)" >> ${env:GITHUB_OUTPUT}
-
-      - name: NPM cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+            8.0
 
       - name: NuGet cache
         uses: actions/cache@v3
@@ -49,9 +30,7 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Install dependencies
-        run: |
-          npm ci
-          dotnet restore --locked-mode
+        run: dotnet restore --locked-mode
 
       - name: Build
         run: dotnet build --configuration Release --no-restore --no-incremental
@@ -70,9 +49,3 @@ jobs:
         with:
           name: NuGet Packages
           path: '**/*.nupkg'
-
-      - name: Codacy Coverage Reporter
-        uses: codacy/codacy-coverage-reporter-action@v1.3.0
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: '**/TestResults/*/coverage.cobertura.xml'
