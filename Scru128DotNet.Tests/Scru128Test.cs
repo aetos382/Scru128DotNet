@@ -27,13 +27,13 @@ public class Scru128Test
         bool ok = data.TryWriteBytes(buffer);
         Assert.True(ok);
 
-        ReadOnlySpan<byte> expected = new byte[]
-        {
+        ReadOnlySpan<byte> expected =
+        [
             0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc,
             0xde, 0xf0, 0x13,
             0x57, 0x9b, 0xdf,
             0x24, 0x68, 0xac, 0xe0
-        }.AsSpan();
+        ];
 
         Assert.True(buffer.SequenceEqual(expected));
     }

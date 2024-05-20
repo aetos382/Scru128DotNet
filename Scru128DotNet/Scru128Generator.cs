@@ -124,9 +124,13 @@ public sealed class Scru128Generator :
 
     private void CheckDisposed()
     {
+#if NET7_0_OR_GREATER
+        ObjectDisposedException.ThrowIf(this._disposed, this);
+#else
         if (this._disposed)
         {
             throw new ObjectDisposedException(this.GetType().Name);
         }
+#endif
     }
 }
