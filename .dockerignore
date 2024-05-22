@@ -1,0 +1,15 @@
+.vs/
+.github/
+**/bin/
+**/obj/
+**/TestResults/
+
+.dockerignore
+.editorconfig
+.gitignore
+.globalconfig
+CHANGELOG.md
+LICENSE
+README.md
+Scru128DotNet.sln
+Scru128DotNet.sln.DotSettings

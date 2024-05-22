@@ -5,14 +5,26 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <InvariantGlobalization>True</InvariantGlobalization>
-    <SelfContained>True</SelfContained>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-    <PublishSingleFile>True</PublishSingleFile>
-    <PublishTrimmed>True</PublishTrimmed>
-    <PublishReadyToRun>True</PublishReadyToRun>
+    <InvariantGlobalization>true</InvariantGlobalization>
     <NoWarn>$(NoWarn);CA1852</NoWarn>
     <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(DockerTargetPlatform)' != '' AND '$(RuntimeIdentifier)' == ''">
+    <_DockerTargetOS>$(DockerTargetPlatform.Split('/')[0])</_DockerTargetOS>
+    <_DockerTargetArch>$(DockerTargetPlatform.Split('/')[1])</_DockerTargetArch>
+    <_DockerTargetVariant Condition="$(DockerTargetPlatform.Split('/').Length) > 2">$(DockerTargetPlatform.Split('/')[2])</_DockerTargetVariant>
+    <_RuntimeArch Condition="'$(_DockerTargetArch)' == 'amd64'">x64</_RuntimeArch>
+    <_RuntimeArch Condition="'$(_RuntimeArch)' == ''">$(_DockerTargetArch)</_RuntimeArch>
+    <RuntimeIdentifier>$(_DockerTargetOS)-$(_RuntimeArch)</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(RuntimeIdentifier.EndsWith('-x64')) OR $(RuntimeIdentifier.EndsWith('-arm64'))">
+    <IsAotCompatible>true</IsAotCompatible>
+    <PublishAot>true</PublishAot>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
   </PropertyGroup>
 
   <ItemGroup>

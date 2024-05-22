@@ -1,18 +1,20 @@
 <Project>
   <PropertyGroup>
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-    <DisableImplicitLibraryPacksFolder>true</DisableImplicitLibraryPacksFolder>
     <DefaultItemExcludesInProjectFolder>
       $(DefaultItemExcludesInProjectFolder);
       packages.lock.json;
       TestResults/**/*
     </DefaultItemExcludesInProjectFolder>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true' AND EXISTS($([System.IO.Path]::Combine($(MSBuildProjectDirectory), 'packages.lock.json')))">true</RestoreLockedMode>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <DisableImplicitLibraryPacksFolder>true</DisableImplicitLibraryPacksFolder>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' == 'True'">
     <None Include="$(MSBuildThisFileDirectory)\README.md">
-      <Visible>True</Visible>
-      <Pack>True</Pack>
+      <Visible>true</Visible>
+      <Pack>true</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>

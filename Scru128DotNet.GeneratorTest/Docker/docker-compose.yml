@@ -1,0 +1,24 @@
+name: scru128
+
+services:
+  build-image:
+    image: scru128-generator-test
+    pull_policy: build
+    build:
+      context: ../..
+      dockerfile: Scru128DotNet.GeneratorTest/Docker/Dockerfile
+      target: run-test
+      platforms:
+        - "linux/amd64"
+        - "linux/s390x"
+    entrypoint: ["sleep", "6000"]
+
+  generator-test-amd64:
+    image: scru128-generator-test
+    pull_policy: never
+    platform: linux/amd64
+
+  generator-test-s390x:
+    image: scru128-generator-test
+    pull_policy: never
+    platform: linux/s390x
