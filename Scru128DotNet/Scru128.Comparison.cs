@@ -13,7 +13,7 @@ public readonly partial struct Scru128 :
     public bool Equals(
         Scru128 other)
     {
-        return this.AsReadOnlySpan().SequenceEqual(other.AsReadOnlySpan());
+        return ((ReadOnlySpan<byte>)this._value).SequenceEqual(other._value);
     }
 
     public override bool Equals(

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Scru128DotNet;
 
@@ -19,7 +18,7 @@ public readonly partial struct Scru128
     {
         Argument.ValidateByteSpan(bytes);
 
-        bytes.CopyTo(this.AsSpan());
+        bytes.CopyTo(this._value);
     }
 
     public Scru128(
@@ -43,10 +42,8 @@ public readonly partial struct Scru128
                 ((ulong)counterLow << 32) |
                 (uint)entropy;
 
-            var span = this.AsSpan();
-
-            BinaryPrimitives.WriteUInt64BigEndian(span, high);
-            BinaryPrimitives.WriteUInt64BigEndian(span.Slice(8), low);
+            BinaryPrimitives.WriteUInt64BigEndian(this._value, high);
+            BinaryPrimitives.WriteUInt64BigEndian(this._value[8..], low);
         }
     }
 
@@ -54,9 +51,7 @@ public readonly partial struct Scru128
     {
         get
         {
-            var span = this.AsReadOnlySpan();
-
-            long value = BinaryPrimitives.ReadInt64BigEndian(span);
+            long value = BinaryPrimitives.ReadInt64BigEndian(this._value);
             value = (value >> 16) & MaxTimestamp;
 
             return value;
@@ -67,9 +62,7 @@ public readonly partial struct Scru128
     {
         get
         {
-            var span = this.AsReadOnlySpan().Slice(6);
-
-            int value = BinaryPrimitives.ReadInt32BigEndian(span);
+            int value = BinaryPrimitives.ReadInt32BigEndian(this._value[6..]);
             value = (value >> 8) & MaxCounter;
 
             return value;
@@ -80,9 +73,7 @@ public readonly partial struct Scru128
     {
         get
         {
-            var span = this.AsReadOnlySpan().Slice(9);
-
-            int value = BinaryPrimitives.ReadInt32BigEndian(span);
+            int value = BinaryPrimitives.ReadInt32BigEndian(this._value[9..]);
             value = (value >> 8) & MaxCounter;
 
             return value;
@@ -93,9 +84,7 @@ public readonly partial struct Scru128
     {
         get
         {
-            var span = this.AsReadOnlySpan().Slice(12);
-
-            int value = BinaryPrimitives.ReadInt32BigEndian(span);
+            int value = BinaryPrimitives.ReadInt32BigEndian(this._value[12..]);
             return value;
         }
     }
@@ -123,27 +112,31 @@ public readonly partial struct Scru128
         return Generate().ToString();
     }
 
-    [StructLayout(LayoutKind.Sequential, Size = 16)]
-    private struct Value
+#if NET8_0_OR_GREATER
+    [InlineArray(BytesCount)]
+#endif
+    private partial struct Value :
+        IEquatable<Value>
     {
-        public byte _firstByte;
+        public byte _byte0;
+
+        public readonly bool Equals(Value other)
+        {
+            return this._byte0 == other._byte0;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Value other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return this._byte0.GetHashCode();
+        }
     }
 
     private readonly Value _value;
-
-    private unsafe Span<byte> AsSpan()
-    {
-        return new Span<byte>(
-            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._firstByte)),
-            BytesCount);
-    }
-
-    private unsafe ReadOnlySpan<byte> AsReadOnlySpan()
-    {
-        return new ReadOnlySpan<byte>(
-            Unsafe.AsPointer(ref Unsafe.AsRef(in this._value._firstByte)),
-            BytesCount);
-    }
 
     internal const int BytesCount = 16;
     internal const int CharCount = 25;

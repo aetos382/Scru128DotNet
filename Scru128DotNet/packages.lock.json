@@ -17,6 +17,12 @@
           "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
+      "PolySharp": {
+        "type": "Direct",
+        "requested": "[1.14.1, )",
+        "resolved": "1.14.1",
+        "contentHash": "mOOmFYwad3MIOL14VCjj02LljyF1GNw1wP0YVlxtcPvqdxjGGMNdNJJxHptlry3MOd8b40Flm8RPOM8JOlN2sQ=="
+      },
       "System.Memory": {
         "type": "Direct",
         "requested": "[4.5.5, )",
@@ -51,6 +57,12 @@
       }
     },
     ".NETStandard,Version=v2.1": {
+      "PolySharp": {
+        "type": "Direct",
+        "requested": "[1.14.1, )",
+        "resolved": "1.14.1",
+        "contentHash": "mOOmFYwad3MIOL14VCjj02LljyF1GNw1wP0YVlxtcPvqdxjGGMNdNJJxHptlry3MOd8b40Flm8RPOM8JOlN2sQ=="
+      },
       "System.Runtime.CompilerServices.Unsafe": {
         "type": "Direct",
         "requested": "[6.0.0, )",
@@ -64,6 +76,12 @@
         "requested": "[8.0.5, )",
         "resolved": "8.0.5",
         "contentHash": "4ISW1Ndgz86FkIbu5rVlMqhhtojdy5rUlxC/N+9kPh9qbYcvHiCvYbHKzAPVIx9OPYIjT9trXt7JI42Y5Ukq6A=="
+      },
+      "PolySharp": {
+        "type": "Direct",
+        "requested": "[1.14.1, )",
+        "resolved": "1.14.1",
+        "contentHash": "mOOmFYwad3MIOL14VCjj02LljyF1GNw1wP0YVlxtcPvqdxjGGMNdNJJxHptlry3MOd8b40Flm8RPOM8JOlN2sQ=="
       }
     }
   }

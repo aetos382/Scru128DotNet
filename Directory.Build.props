@@ -5,6 +5,11 @@
       packages.lock.json;
       TestResults/**/*
     </DefaultItemExcludesInProjectFolder>
+    <DefaultItemExcludes>
+      $(DefaultItemExcludes);
+      *.log;
+      *.binlog
+    </DefaultItemExcludes>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
     <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true' AND EXISTS($([System.IO.Path]::Combine($(MSBuildProjectDirectory), 'packages.lock.json')))">true</RestoreLockedMode>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
